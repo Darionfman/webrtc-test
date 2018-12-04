@@ -26,8 +26,8 @@
     "express": "^4.16.4",
     "nodemon": "^1.17.3",
     "npm-run-script": "0.0.4",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "socket.io": "^2.2.0",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.8.2"
