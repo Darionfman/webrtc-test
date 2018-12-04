@@ -23,7 +23,7 @@
     "bootstrap": "^3.3.7",
     "cors": "^2.8.5",
     "css-loader": "^0.28.7",
-    "express": "^4.15.4",
+    "express": "^4.16.4",
     "nodemon": "^1.17.3",
     "npm-run-script": "0.0.4",
     "react": "^15.6.1",
