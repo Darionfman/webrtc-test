@@ -2,8 +2,8 @@ const compression = require('compression');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const http = require('http');
 const app = express();
+const http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 app.use(compression());
