@@ -2,6 +2,63 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <script>
+
+      let socket = io.connect(SIGNALING_SERVER + channel);
+      socket.on('connect', function () {
+          // setup peer connection & pass socket object over the constructor!
+      });
+      socket.send = function (message) {
+        socket.emit('message', {
+          sender: sender,
+          data: message
+        });
+      };
+      // let peer = new PeerConnection('http://socketio-signaling.jit.su:80');
+      let peer = new PeerConnection(socket);
+      peer.onUserFound = function(userid) {
+        if (document.getElementById(userid)) return;
+        let tr = document.createElement('tr');
+        let td1 = document.createElement('td');
+        let td2 = document.createElement('td');
+        td1.innerHTML = userid + ' has camera. Are you interested in video chat?';
+        let button = document.createElement('button');
+        button.innerHTML = 'Join';
+        button.id = userid;
+        button.style.float = 'right';
+        button.onclick = function() {
+          button = this;
+          getUserMedia(function(stream) {
+            peer.addStream(stream);
+            peer.sendParticipationRequest(button.id);
+          });
+          button.disabled = true;
+        };
+        td2.appendChild(button);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        roomsList.appendChild(tr);
+      };
+      peer.onStreamAdded = function(e) {
+        let video = e.mediaElement;
+        video.setAttribute('width', 600);
+        videosContainer.insertBefore(video, videosContainer.firstChild);
+        video.play();
+        rotateVideo(video);
+        scaleVideos();
+      };
+      peer.onStreamEnded = function(e) {
+        let video = e.mediaElement;
+        if (video) {
+          video.style.opacity = 0;
+          rotateVideo(video);
+          setTimeout(function() {
+              video.parentNode.removeChild(video);
+              scaleVideos();
+          }, 1000);
+        }
+      };
+    </script>
   </head>
 
   <body>

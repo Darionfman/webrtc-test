@@ -1,16 +1,29 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client';
-
+const SIGNALING_SERVER = 'https://localhost:8000/';
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = { videoSrc: null };
+    this.state = {
+      channel: 'channel1',
+      sender: Math.round(Math.random() * 999999999) + 999999999,
+      videoSrc: null
+    };
   }
+
   componentDidMount() {
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
     if (navigator.getUserMedia) {
       navigator.getUserMedia({video: true}, this.handleVideo, this.videoError);
     }
+  }
+
+  ioSetup = () => {
+    const { channel, sender } = this.state;
+    io.connect(SIGNALING_SERVER).emit('new-channel', {
+      channel: channel,
+      sender: sender
+    });
   }
 
   handleVideo = (stream) => {
@@ -21,7 +34,7 @@ class App extends Component {
   videoError = () => {
 
   }
-  
+
   render() {
     return <div>
       <video src={this.state.videoSrc} autoPlay="true" />
